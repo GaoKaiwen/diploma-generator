@@ -1,13 +1,10 @@
-# the base image
+# Building JAR
+FROM maven:3.9-eclipse-temurin-21 AS builder
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Final image
 FROM eclipse-temurin:21
-
-# the JAR file path
-ARG JAR_FILE=target/*.jar
-
-# Copy the JAR file from the build context into the Docker image
-COPY ${JAR_FILE} application.jar
-
-CMD apt-get update -y
-
-# Set the default command to run the Java application
-ENTRYPOINT ["java", "-jar", "/application.jar"]
+COPY --from=builder /app/target/*SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -8,13 +8,13 @@
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 0; /* Remove margem padrão */
+                margin: 0; /* Remove default margin */
             }
             body {
                 margin: 0;
                 padding: 0;
             }
-            /* Ocultar cabeçalho e rodapé padrão */
+            /* Hide default header and footer */
             body::before, body::after {
                 display: none;
             }
@@ -32,8 +32,8 @@
         }
         
         .diploma-container {
-            width: 90%; /* Ajuste de largura para caber na página A4 em modo paisagem */
-            max-width: 1000px; /* Garantir que não ultrapasse a largura máxima */
+            width: 90%; /* Adjust width to fit A4 landscape mode */
+            max-width: 1000px; /* Ensure it does not exceed the maximum width */
             margin: 0 auto;
             padding: 40px;
             background-color: white;
@@ -81,14 +81,14 @@
 </head>
 <body>
     <div class="diploma-container">
-        <div class="header">Universidade de Programação</div>
-        <div class="sub-header">Certificado de Conclusão</div>
+        <div class="header">Kaiwen University</div>
+        <div class="sub-header">Certificate of Completion</div>
         <div class="content">
             <p>
-                Certificamos que <strong>[[nome]]</strong>, [[nacionalidade]], natural do Estado de [[estado]], nascido em [[data_nascimento]], RG [[documento]], concluiu em [[data_conclusao]] o curso de [[curso]], [[nivel_de_especializacao]], com carga horária de [[carga_horaria]] horas.
+                We hereby certify that <strong>[[nome]]</strong>, [[nacionalidade]], native of the State of [[estado]], born on [[data_nascimento]], ID [[documento]], completed on [[data_conclusao]] the course of [[curso]], [[nivel_de_especializacao]], with a total of [[carga_horaria]] hours.
             </p>
             <p>
-                Este certificado é concedido em conformidade com o artigo 44, inciso 3353, da Lei 9394/96, e com a Resolução 
+                This certificate is granted in accordance with Article 44, section 3353, of Law 9394/96, and with Resolution 
                 C.N.C./C.C.S. nº 01/07.
             </p>
         </div>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diploma Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #444;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Diploma Generator</h1>
+        <form id="diplomaForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="nationality">Nationality:</label>
+            <input type="text" id="nationality" name="nationality" required>
+
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" required>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="rg">RG:</label>
+            <input type="text" id="rg" name="rg" required>
+
+            <label for="completionDate">Completion Date:</label>
+            <input type="date" id="completionDate" name="completionDate" required>
+
+            <label for="course">Course:</label>
+            <input type="text" id="course" name="course" required>
+
+            <label for="specializationLevel">Specialization Level:</label>
+            <select id="specializationLevel" name="specializationLevel" required>
+                <option value="Bacharelado">Bachelor's</option>
+                <option value="Mestrado">Master's</option>
+                <option value="Doutorado">Doctorate</option>
+            </select>
+
+            <label for="workload">Workload (hours):</label>
+            <input type="number" id="workload" name="workload" required>
+
+            <button type="button" onclick="generateAndDownloadPDF()">Generate and Download PDF</button>
+        </form>
+
+        <pre id="output" style="background: #f4f4f9; padding: 10px; border-radius: 4px; margin-top: 20px;"></pre>
+    </div>
+
+    <script>
+	function formatDateToBackend(dateString) {
+	    const [year, month, day] = dateString.split('-');
+	    return `${day}-${month}-${year}`;
+	}
+
+        async function generateAndDownloadPDF() {
+            const form = document.getElementById('diplomaForm');
+            const output = document.getElementById('output');
+
+            const data = {
+                nome: form.name.value,
+                nacionalidade: form.nationality.value,
+                estado: form.state.value,
+                dataDeNascimento: formatDateToBackend(form.dob.value),
+                rg: form.rg.value,
+                dataDeConclusao: formatDateToBackend(form.completionDate.value),
+                curso: form.course.value,
+                nivelDeEspecializacao: form.specializationLevel.value,
+                cargaHorariaEmHoras: form.workload.value
+            };
+
+            try {
+                const response = await fetch('/diploma-generator/api/diploma', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate PDF');
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'diploma.pdf';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                output.textContent = 'PDF downloaded successfully!';
+            } catch (error) {
+                output.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
